@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  api:
+    build: ./api
+    ports:
+      - "1323:1323"
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  cache:
+    image: memcached:latest
+    command: ["-m", "128"]
+    ports:
+      - "11211:11211"
